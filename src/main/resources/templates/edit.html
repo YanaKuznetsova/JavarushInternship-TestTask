@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/style.css}" rel="stylesheet" type="text/css">
+    <title>Редактировать комплектующую</title>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h3>Комплектующие для ПК</h3>
+        </div>
+        <div id="cont">
+            <div id="content">
+            <div class="col-md-12">
+                <h3> Редактировать комплектуюущую </h3>
+            </div>
+
+            <form action="/save" th:action="@{/save}" th:object="${item}" method="post">
+                <p>Название: <input type="text" th:field="*{name}" th:placeholder="Название" /></p>
+                <div> Необходимость:
+                    <input type=radio th:field="*{necessity}" th:value="1" th:text="Да" />
+                    <input type=radio th:field="*{necessity}" th:value="0" th:text="Нет"/>
+                </div>
+                <p>Количество: <input type=number th:field="*{amount}" th:placeholder="Количество"/></p>
+                <input type="hidden" th:field="*{id}" />
+
+                <p><input class="button" type="submit" value="Сохранить" />
+                    <input class="button" type="reset" value="Сбросить" /></p>
+            </form>
+
+
+            <th:block th:switch="${errorMessage}">
+                <div class="warning" th:case="'nameMissing'">
+                    Введите корректное название комплектующей.
+                </div>
+                <div class="warning" th:case="'necessityMissing'">
+                    Выберите значение параметра необходимость.
+                </div>
+                <div class="warning" th:case="'amountMissing'">
+                    Введите положительное число - количество комплектующих.
+                </div>
+            </th:block>
+            </div>
+
+            <div id="filters">
+                <a href="#" th:href="@{/}">
+                    <img id=largeImage src="/images/back.png" title="Вернуться" alt="Вернуться">
+                    Вернуться к списку</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="/styles/style.css" rel="stylesheet" type="text/css">
+    <title>Список комплектующих</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h3>Комплектующие для ПК</h3>
+        </div>
+        <div id="cont">
+            <div id="content">
+                <table>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Необходимость</th>
+                        <th>Количество</th>
+                        <th>Изменить</th>
+                        <th>Удалить</th>
+                    </tr>
+                    <tbody>
+                    <tr th:each="item, iStat : ${itemsPerPage}">
+                        <td th:text="${item.name}" />
+                        <td>
+                            <span th:if="${item.necessity} == '1'" th:text="Да" />
+                            <span th:unless="${item.necessity} == '1'" th:text="Нет" />
+                        </td>
+                        <td th:text="${item.amount}" />
+                        <td><a th:href="@{/edit(id=${item.id})}">
+                            <img id="smallImage" src="/images/edit.png" title="Изменить" alt="Изменить"></a></td>
+                        <td><a th:href="@{/delete(id=${item.id})}">
+                            <img id="smallImage" src="/images/delete.png" title="Удалить" alt="Удалить"></a></td>
+                    </tr>
+                        <td colspan=6 th:unless="${itemsPerPage}">
+                            По запросу <strong th:text="${find}"></strong> ничего не найдено </td>
+                    </tbody>
+                </table>
+
+                <p id="pagination">
+                    <a th:each="element: ${pageNumbersMap}"
+                    th:href="@{/(page=${element.key})}"
+                       th:text=${element.value} th:id="${element.key==currentPage} ? active"></a>
+                </p><br>
+
+                <br>
+                <h4 th:unless="${find}">
+                    Всего можно собрать <span th:text="${numOfKits}"></span>
+                    компьютеров из комплектующих, имеющихся в наличии.</h4>
+                <br>
+            </div>
+
+            <div id="filters">
+                <div>
+                    <form action="#" th:action=="@{/}" method="get">
+                        <input type="search" name="find"
+                        th:placeholder="${find.isEmpty()} ? 'Найти комплектующую' : ${find} ">
+                        <input type="submit" value="Поиск">
+                        <input type="hidden" name="page" value="1">
+                    </form>
+                    <br>
+                    <form action="#" th:action=="@{/}" method="get">
+
+                        <div><b>Фильтр деталей</b></div>
+                        <div><input type=radio name="filter" onclick="this.form.submit()"
+                                    th:value="1" th:text="Необходимые"
+                                    th:checked="${filter} == '1'"/></div>
+                        <div><input type=radio name="filter" onclick="this.form.submit()"
+                                    th:value="0" th:text="Опциональные"
+                                    th:checked="${filter} == '0'"/></div>
+                        <div><input type=radio name="filter" onclick="this.form.submit()"
+                                    th:value="2" th:text="Все"
+                                    th:checked="${filter} == '2'"/></div>
+                        <input type="hidden" name="page" value="1">
+                    </form>
+                    <br>
+                </form>
+
+                <button id="button"><a href="#" th:href="@{/add}"> Добавить комплектующую </a></button>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>
+
